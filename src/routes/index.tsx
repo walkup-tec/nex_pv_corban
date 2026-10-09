@@ -42,7 +42,7 @@ function Index() {
     initTracking();
     const el = ctaRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setSticky(!e.isIntersecting && e.boundingClientRect.top < 0));
+    const io = new IntersectionObserver(([e]) => e && setSticky(!e.isIntersecting && e.boundingClientRect.top < 0));
     io.observe(el);
     return () => io.disconnect();
   }, []);
