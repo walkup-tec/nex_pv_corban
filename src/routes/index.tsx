@@ -18,6 +18,7 @@ export const Route = createFileRoute("/")({
       { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://corban.nexmeta.com.br/" }],
   }),
   component: Index,
 });
