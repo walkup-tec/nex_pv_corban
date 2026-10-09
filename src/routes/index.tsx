@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Check, ShieldCheck, Bot } from "lucide-react";
+import logo from "@/assets/nex-logo-dark.png";
 import { WHATSAPP_URL, captureUtms, initTracking, trackWhatsappClick } from "@/lib/tracking";
 
 const DESC =
@@ -53,11 +54,8 @@ function Index() {
       <div className="mx-auto grid max-w-7xl gap-12 px-5 pb-32 pt-8 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16 lg:pb-12 lg:pt-12">
         {/* Left */}
         <div>
-          <div className="rise flex items-center gap-3" style={{ animationDelay: "0ms" }}>
-            <span className="font-display text-3xl font-extrabold tracking-tight">
-              NEX<span className="text-primary">.</span>
-            </span>
-            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Marketing Digital</span>
+          <div className="rise" style={{ animationDelay: "0ms" }}>
+            <img src={logo} alt="NEX Marketing Digital" className="h-12 w-auto object-contain sm:h-14" />
           </div>
 
           <p className="rise mt-10 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-secondary/60 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-primary" style={{ animationDelay: "100ms" }}>
