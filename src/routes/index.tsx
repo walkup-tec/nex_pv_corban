@@ -82,10 +82,6 @@ function Index() {
               </li>
             ))}
           </ul>
-
-          <p className="rise mt-8 text-sm text-muted-foreground" style={{ animationDelay: "500ms" }}>
-            Tecnologia desde 2006.
-          </p>
         </div>
 
         {/* Right: offer */}
@@ -124,7 +120,9 @@ function Index() {
               onClick={() => trackWhatsappClick("whatsapp_hero_click", "hero_offer_card")}
               className={`${ctaClass} mt-7`}
             >
-              <WhatsIcon className="h-6 w-6" /> QUERO MEU DESCONTO DE 50%
+              <WhatsIcon className="h-6 w-6" />
+              <span className="lg:hidden">QUERO 50% DESCONTO</span>
+              <span className="hidden lg:inline">QUERO MEU DESCONTO DE 50%</span>
             </a>
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" /> Fale diretamente com um especialista da NEX.
@@ -158,7 +156,7 @@ function Index() {
           onClick={() => trackWhatsappClick("whatsapp_sticky_click", "mobile_sticky_bar")}
           className={`${ctaClass} py-4`}
         >
-          <WhatsIcon className="h-5 w-5" /> QUERO MEU DESCONTO DE 50%
+          <WhatsIcon className="h-5 w-5" /> QUERO 50% DESCONTO
         </a>
       </div>
     </main>
