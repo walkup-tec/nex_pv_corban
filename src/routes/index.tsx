@@ -68,7 +68,11 @@ function Index() {
           </h1>
 
           <p className="rise mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground" style={{ animationDelay: "300ms" }}>
-            Especialistas em produtos de crédito desde 2019. Criamos seus anúncios, artes, textos e estrutura Meta, enquanto você acompanha os indicadores das campanhas.
+            Especialistas em produtos de crédito desde 2019.
+            <span className="hidden lg:inline">
+              {" "}
+              Criamos seus anúncios, artes, textos e estrutura Meta, enquanto você acompanha os indicadores das campanhas.
+            </span>
           </p>
 
           <ul className="rise mt-8 flex flex-wrap gap-3" style={{ animationDelay: "400ms" }}>
