@@ -2,7 +2,7 @@
 export const TRACKING = {
   GTM_ID: "", // e.g. "GTM-XXXXXXX" (if set, GA4/Pixel should be fired via GTM to avoid duplicates)
   GA4_ID: "", // e.g. "G-XXXXXXXXXX"
-  META_PIXEL_ID: "",
+  META_PIXEL_ID: "1133103506285537",
   CANONICAL_URL: "",
 };
 
@@ -67,7 +67,7 @@ export function initTracking() {
     w.gtag("config", TRACKING.GA4_ID);
     add(`https://www.googletagmanager.com/gtag/js?id=${TRACKING.GA4_ID}`);
   }
-  if (TRACKING.META_PIXEL_ID) {
+  if (TRACKING.META_PIXEL_ID && typeof w.fbq !== "function") {
     const q: unknown[] = [];
     const fbq = (...a: unknown[]) => q.push(a);
     w.fbq = fbq;
