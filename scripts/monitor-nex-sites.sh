@@ -229,10 +229,15 @@ cmd_install() {
   if [[ -f "$src" && "$(readlink -f "$src")" != "$(readlink -f "$SELF")" ]]; then
     cp -f "$src" "$SELF"
   fi
+  local extra src_file dst_file
   for extra in repair-traefik-main-yaml.sh heal-nex-corban-pos-redeploy.sh align-traefik-entrypoints.sh; do
-    if [[ -f "${src_dir}/${extra}" ]]; then
-      cp -f "${src_dir}/${extra}" "${INSTALL_DIR}/${extra}"
+    src_file="${src_dir}/${extra}"
+    dst_file="${INSTALL_DIR}/${extra}"
+    [[ -f "$src_file" ]] || continue
+    if [[ -f "$dst_file" && "$(readlink -f "$src_file")" == "$(readlink -f "$dst_file")" ]]; then
+      continue
     fi
+    cp -f "$src_file" "$dst_file"
   done
   sed -i 's/\r$//' "$SELF" "$REPAIR" "$HEAL" "$ALIGN" 2>/dev/null || true
   chmod +x "$SELF" "$REPAIR" "$HEAL" "$ALIGN" 2>/dev/null || true
