@@ -32,7 +32,36 @@ URL="http://172.17.0.1:${HOST_PORT}/"
 log() { printf '[%s] %s\n' "$(date -Is)" "$*" | tee -a "$LOG"; }
 
 http_code() {
-  curl -sk -o /dev/null -w '%{http_code}' --max-time 12 "$@" 2>/dev/null || echo 000
+  local code
+  code="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 12 "$@" 2>/dev/null || true)"
+  [[ -n "$code" ]] || code="000"
+  printf '%s' "$code"
+}
+
+# Nomes reais dos entryPoints do Traefik em execução (http/https ou web/websecure).
+detect_eps() {
+  local svc env
+  svc="$(docker service ls --format '{{.Name}}' | grep -Ei 'traefik' | head -1 || true)"
+  [[ -n "$svc" ]] || return 1
+  env="$(docker service inspect "$svc" --format '{{range .Spec.TaskTemplate.ContainerSpec.Env}}{{println .}}{{end}}' 2>/dev/null || true)"
+  printf '%s\n' "$env" | python3 -c '
+import re, sys
+http_ep = https_ep = ""
+for line in sys.stdin:
+    m = re.match(r"TRAEFIK_ENTRYPOINTS_([A-Za-z0-9]+)_ADDRESS=(.+)", line.strip())
+    if not m:
+        continue
+    name, addr = m.group(1).lower(), m.group(2)
+    if addr.rstrip("/").endswith(":443"):
+        https_ep = name
+    elif addr.rstrip("/").endswith(":80"):
+        http_ep = name
+if http_ep and https_ep:
+    print(http_ep)
+    print(https_ep)
+else:
+    sys.exit(1)
+'
 }
 
 ok_code() {
@@ -67,24 +96,50 @@ yaml_ok() {
   grep -q "172.17.0.1:${HOST_PORT}" "$YAML" || return 1
   grep -q "$DOMAIN" "$YAML" || return 1
   grep -q "$PANEL_HOST" "$YAML" || return 1
+  local eps http_ep https_ep
+  if ! eps="$(detect_eps)"; then
+    return 0
+  fi
+  http_ep="$(printf '%s\n' "$eps" | sed -n '1p')"
+  https_ep="$(printf '%s\n' "$eps" | sed -n '2p')"
+  python3 - "$YAML" "$http_ep" "$https_ep" <<'PY'
+import json, sys
+from pathlib import Path
+data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+routers = data["http"]["routers"]
+ok = (
+    routers["nex-corban-http"]["entryPoints"] == [sys.argv[2]]
+    and routers["nex-corban-https"]["entryPoints"] == [sys.argv[3]]
+)
+sys.exit(0 if ok else 1)
+PY
 }
 
 write_yaml() {
-  local resolver="letsencrypt"
-  resolver="$(
-    docker service inspect easypanel-traefik \
-      --format '{{range .Spec.TaskTemplate.ContainerSpec.Env}}{{println .}}{{end}}' 2>/dev/null \
-      | grep -iE '^TRAEFIK_CERTIFICATESRESOLVERS_' \
-      | head -1 \
-      | sed -E 's/^TRAEFIK_CERTIFICATESRESOLVERS_([^_]+)_.*/\1/' \
-      | tr '[:upper:]' '[:lower:]' || true
-  )"
+  local resolver="letsencrypt" http_ep="http" https_ep="https" eps svc
+  svc="$(docker service ls --format '{{.Name}}' | grep -Ei 'traefik' | head -1 || true)"
+  if [[ -n "$svc" ]]; then
+    resolver="$(
+      docker service inspect "$svc" \
+        --format '{{range .Spec.TaskTemplate.ContainerSpec.Env}}{{println .}}{{end}}' 2>/dev/null \
+        | grep -iE '^TRAEFIK_CERTIFICATESRESOLVERS_' \
+        | head -1 \
+        | sed -E 's/^TRAEFIK_CERTIFICATESRESOLVERS_([^_]+)_.*/\1/' \
+        | tr '[:upper:]' '[:lower:]' || true
+    )"
+  fi
   [[ -n "${resolver:-}" ]] || resolver="letsencrypt"
+  if eps="$(detect_eps)"; then
+    http_ep="$(printf '%s\n' "$eps" | sed -n '1p')"
+    https_ep="$(printf '%s\n' "$eps" | sed -n '2p')"
+  fi
 
-  python3 - "$YAML" "$URL" "$DOMAIN" "$PANEL_HOST" "$resolver" <<'PY'
+  python3 - "$YAML" "$URL" "$DOMAIN" "$PANEL_HOST" "$resolver" "$http_ep" "$https_ep" <<'PY'
 import json, sys
 from pathlib import Path
-path, url, domain, panel, resolver = Path(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+path, url, domain, panel, resolver, http_ep, https_ep = (
+    Path(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7]
+)
 rule = f"Host(`{domain}`) || Host(`{panel}`)"
 data = {
   "http": {
@@ -93,14 +148,14 @@ data = {
     },
     "routers": {
       "nex-corban-http": {
-        "entryPoints": ["http"],
+        "entryPoints": [http_ep],
         "middlewares": ["nex-corban-redirect-https"],
         "service": "nex-corban-svc",
         "rule": rule,
         "priority": 100000,
       },
       "nex-corban-https": {
-        "entryPoints": ["https"],
+        "entryPoints": [https_ep],
         "service": "nex-corban-svc",
         "rule": rule,
         "priority": 100000,
