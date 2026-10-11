@@ -226,19 +226,16 @@ cmd_install() {
   local src_dir src
   src="${BASH_SOURCE[0]}"
   src_dir="$(cd "$(dirname "$src")" && pwd)"
-  if [[ -f "$src" && "$(readlink -f "$src")" != "$(readlink -f "$SELF")" ]]; then
+  if [[ "$src_dir" != "$INSTALL_DIR" && -f "$src" ]]; then
     cp -f "$src" "$SELF"
   fi
-  local extra src_file dst_file
-  for extra in repair-traefik-main-yaml.sh heal-nex-corban-pos-redeploy.sh align-traefik-entrypoints.sh; do
-    src_file="${src_dir}/${extra}"
-    dst_file="${INSTALL_DIR}/${extra}"
-    [[ -f "$src_file" ]] || continue
-    if [[ -f "$dst_file" && "$(readlink -f "$src_file")" == "$(readlink -f "$dst_file")" ]]; then
-      continue
-    fi
-    cp -f "$src_file" "$dst_file"
-  done
+  if [[ "$src_dir" != "$INSTALL_DIR" ]]; then
+    local extra
+    for extra in repair-traefik-main-yaml.sh heal-nex-corban-pos-redeploy.sh align-traefik-entrypoints.sh; do
+      [[ -f "${src_dir}/${extra}" ]] || continue
+      cp -f "${src_dir}/${extra}" "${INSTALL_DIR}/${extra}"
+    done
+  fi
   sed -i 's/\r$//' "$SELF" "$REPAIR" "$HEAL" "$ALIGN" 2>/dev/null || true
   chmod +x "$SELF" "$REPAIR" "$HEAL" "$ALIGN" 2>/dev/null || true
   [[ -f "$SELF" ]] || { echo "script ausente em $SELF"; exit 1; }
