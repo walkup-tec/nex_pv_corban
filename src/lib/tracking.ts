@@ -32,7 +32,7 @@ function getUtms() {
 
 type W = Window & { dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void; fbq?: (...a: unknown[]) => void };
 
-export function trackWhatsappClick(event: "whatsapp_hero_click" | "whatsapp_sticky_click", origin: string) {
+export function trackWhatsappClick(event: "whatsapp_hero_click" | "whatsapp_sticky_click" | "whatsapp_solutions_click", origin: string) {
   const w = window as W;
   const payload = { cta_id: event, click_origin: origin, ...getUtms() };
   if (TRACKING.GTM_ID) {
