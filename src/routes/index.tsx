@@ -1,16 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Check, ShieldCheck, Bot } from "lucide-react";
+import { Check, ShieldCheck, Bot, Columns3, ContactRound, ArrowRightLeft, Users, Smartphone, Megaphone, ArrowDown } from "lucide-react";
 import logo from "@/assets/nex-logo-dark.png";
+import { chatbotOffer } from "@/lib/chatbot-offer";
 import { WHATSAPP_URL, captureUtms, initTracking, trackWhatsappClick } from "@/lib/tracking";
 
 const DESC =
-  "Gestão de Meta Ads para correspondentes bancários. Especialistas em tráfego pago e marketing para produtos de crédito desde 2019. NEX Ads.";
+  "Gestão de Meta Ads para correspondentes bancários com chatbot gratuito para clientes: WhatsApp Business, Kanban e atendentes ilimitados. NEX Ads.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NEX ADS" },
+      { title: "NEX ADS — Meta Ads e chatbot gratuito para CORBAN" },
       { name: "description", content: DESC },
       { name: "robots", content: "index,follow" },
       { property: "og:title", content: "NEX ADS — Meta Ads para CORBAN" },
@@ -71,7 +72,7 @@ function Index() {
             Especialistas em produtos de crédito desde 2019.
             <span className="hidden lg:inline">
               {" "}
-              Criamos seus anúncios, artes, textos e estrutura Meta, enquanto você acompanha os indicadores das campanhas.
+              Criamos seus anúncios, artes, textos e estrutura Meta — e você ganha um chatbot de atendimento para o seu WhatsApp.
             </span>
           </p>
 
@@ -82,11 +83,18 @@ function Index() {
               </li>
             ))}
           </ul>
+
+          <div className="rise mt-7 border-l-2 border-primary pl-5" style={{ animationDelay: "500ms" }}>
+            <p className="flex items-center gap-2 text-sm font-bold text-primary"><Bot className="h-5 w-5 shrink-0" aria-hidden="true" /> CHATBOT GRATUITO PARA CLIENTES</p>
+            <p className="mt-2 font-display text-xl font-bold leading-snug">Mais do que anúncios. Atendimento que acompanha suas oportunidades.</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">WhatsApp Business, funil de vendas e toda a sua equipe em uma ferramenta, sem custo adicional.</p>
+            <a href="#solucoes" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">Conheça os recursos <ArrowDown className="h-4 w-4" aria-hidden="true" /></a>
+          </div>
         </div>
 
         {/* Right: offer */}
         <div className="rise relative" style={{ animationDelay: "300ms" }}>
-          <div className="absolute -inset-px rounded-3xl bg-gradient-brand opacity-60 blur-[2px]" aria-hidden="true" />
+              <div className="absolute -inset-px rounded-3xl bg-gradient-brand opacity-60 blur-[2px]" aria-hidden="true" />
           <div className="relative rounded-3xl bg-card p-6 shadow-glow sm:p-8">
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center lg:flex-nowrap lg:justify-start lg:text-left">
               <span className="font-display text-4xl font-extrabold text-primary sm:text-5xl">50% OFF</span>
@@ -98,15 +106,16 @@ function Index() {
 
             <div className="mt-7 rounded-2xl border border-accent/50 bg-secondary/70 p-5">
               <p className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-primary">
-                <Bot className="h-4 w-4" aria-hidden="true" /> Bônus exclusivo NEX
+                <Bot className="h-4 w-4" aria-hidden="true" /> Incluído para clientes NEX
               </p>
               <p className="mt-3 font-display text-xl font-bold leading-snug">
-                Ganhe um chatbot para atender seu WhatsApp comercial.
+                Chatbot de atendimento <span className="text-primary">gratuito.</span>
               </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Atenda pelo WhatsApp e organize suas vendas, sem custo adicional pela ferramenta.</p>
               <ul className="mt-4 grid grid-cols-1 gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                {["Respostas automáticas", "Atendimento inicial", "Qualificação de leads", "Transferência entre agentes"].map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" /> {f}
+                {chatbotOffer.features.map((f) => (
+                  <li key={f.icon} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" /> {f.title}
                   </li>
                 ))}
               </ul>
@@ -141,6 +150,41 @@ function Index() {
           </div>
         </div>
       </div>
+
+      <section id="solucoes" aria-labelledby="solutions-title" className="scroll-mt-8 border-t border-border bg-background/70">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
+          <p className="text-sm font-bold uppercase text-primary">Soluções NEX para CORBAN</p>
+          <h2 id="solutions-title" className="mt-3 max-w-3xl font-display text-3xl font-extrabold leading-tight sm:text-4xl">Marketing digital para atrair.<br />Chatbot para atender e organizar.</h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">Nossa especialidade é o marketing para produtos de crédito. E nossos clientes recebem uma ferramenta de atendimento que agrega ainda mais valor à operação.</p>
+
+          <div className="mt-10 grid gap-8 border-y border-border py-8 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <div className="flex items-center gap-3"><Megaphone className="h-6 w-6 text-primary" aria-hidden="true" /><h3 className="font-display text-xl font-bold">Gestão de Meta Ads</h3></div>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Estratégia, artes, textos e estrutura de anúncios criados por quem entende de crédito desde 2019. Indicadores das campanhas disponíveis no CRM.</p>
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-3"><Bot className="h-6 w-6 text-primary" aria-hidden="true" /><h3 className="font-display text-xl font-bold">Chatbot de atendimento</h3><span className="rounded-md bg-primary px-3 py-1 text-xs font-extrabold text-primary-foreground">GRATUITO PARA CLIENTES</span></div>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Do primeiro contato à organização da carteira: atendimento pelo WhatsApp, visão do funil e colaboração entre atendentes em uma única ferramenta.</p>
+            </div>
+          </div>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {chatbotOffer.features.map((feature) => {
+              const FeatureIcon = { whatsapp: WhatsIcon, kanban: Columns3, phones: Smartphone, clients: ContactRound, transfer: ArrowRightLeft, team: Users }[feature.icon];
+              return <article key={feature.icon} className="rounded-lg border border-border bg-card p-6">
+                <FeatureIcon className="h-6 w-6 text-primary" aria-hidden="true" />
+                <h4 className="mt-4 font-display text-base font-bold">{feature.title}</h4>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
+              </article>;
+            })}
+          </div>
+
+          <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-lg font-display text-xl font-bold">Sua agência de marketing.<br /><span className="text-primary">Mais valor para o seu atendimento.</span></p>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappClick("whatsapp_solutions_click", "chatbot_solutions")} className={`${ctaClass} sm:w-auto`}><WhatsIcon className="h-5 w-5 shrink-0" /> QUERO ESSE BENEFÍCIO</a>
+          </div>
+        </div>
+      </section>
 
       {/* Sticky mobile CTA */}
       <div
