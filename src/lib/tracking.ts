@@ -1,6 +1,6 @@
 // Tracking config — fill in real IDs when provided by NEX. Empty = disabled.
 export const TRACKING = {
-  GTM_ID: "", // e.g. "GTM-XXXXXXX" (if set, GA4/Pixel should be fired via GTM to avoid duplicates)
+  GTM_ID: "GTM-PQBN7SPR", // when set, GA4/Pixel should be fired via GTM to avoid duplicates
   GA4_ID: "", // e.g. "G-XXXXXXXXXX"
   META_PIXEL_ID: "1133103506285537",
   CANONICAL_URL: "",
@@ -8,7 +8,7 @@ export const TRACKING = {
 
 export const WHATSAPP_NUMBER = "555197979224"; // +55 51 9797-9224
 const MESSAGE =
-  "Olá! Sou correspondente bancário, vim pela landing page da NEX e quero aproveitar a condição especial de 50% OFF na gestão de Meta Ads. Gostaria de conversar com um especialista.";
+  "Olá! Sou correspondente bancário, vim pela landing page da NEX e quero o valor promocional de R$ 499,00 na gestão de Meta Ads. Gostaria de conversar com um especialista.";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(MESSAGE)}`;
 
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
@@ -51,12 +51,7 @@ export function initTracking() {
     s.src = src;
     document.head.appendChild(s);
   };
-  if (TRACKING.GTM_ID) {
-    w.dataLayer = w.dataLayer || [];
-    w.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
-    add(`https://www.googletagmanager.com/gtm.js?id=${TRACKING.GTM_ID}`);
-    return;
-  }
+  if (TRACKING.GTM_ID) return;
   if (TRACKING.GA4_ID) {
     w.dataLayer = w.dataLayer || [];
     w.gtag = function () {

@@ -96,8 +96,8 @@ function Index() {
         <div className="rise relative" style={{ animationDelay: "300ms" }}>
               <div className="absolute -inset-px rounded-3xl bg-gradient-brand opacity-60 blur-[2px]" aria-hidden="true" />
           <div className="relative rounded-3xl bg-card p-6 shadow-glow sm:p-8">
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center lg:flex-nowrap lg:justify-start lg:text-left">
-              <span className="font-display text-4xl font-extrabold text-primary sm:text-5xl">50% OFF</span>
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center lg:justify-start lg:text-left">
+              <span className="font-display text-3xl font-extrabold text-primary sm:text-4xl">Apenas R$ 499,00</span>
               <span className="hidden h-10 w-px bg-border sm:block" aria-hidden="true" />
               <span className="text-sm font-semibold leading-tight">Condição especial por tempo limitado</span>
               <span className="hidden h-10 w-px bg-border sm:block" aria-hidden="true" />
@@ -130,8 +130,7 @@ function Index() {
               className={`${ctaClass} mt-7`}
             >
               <WhatsIcon className="h-6 w-6" />
-              <span className="lg:hidden">QUERO 50% DESCONTO</span>
-              <span className="hidden lg:inline">QUERO MEU DESCONTO DE 50%</span>
+              Quero valor promocional
             </a>
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" /> Fale diretamente com um especialista da NEX.
@@ -200,7 +199,7 @@ function Index() {
           onClick={() => trackWhatsappClick("whatsapp_sticky_click", "mobile_sticky_bar")}
           className={`${ctaClass} py-4`}
         >
-          <WhatsIcon className="h-5 w-5" /> QUERO 50% DESCONTO
+          <WhatsIcon className="h-5 w-5" /> Quero valor promocional
         </a>
       </div>
     </main>
