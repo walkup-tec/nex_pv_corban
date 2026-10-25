@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { TRACKING } from "../lib/tracking";
+import { GOOGLE_TAG_SNIPPET, GOOGLE_TAG_SRC, TRACKING } from "../lib/tracking";
 
 const META_PIXEL_SNIPPET = `!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -119,6 +119,12 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
       <head>
+        {TRACKING.GA4_ID ? (
+          <>
+            <script async src={GOOGLE_TAG_SRC} />
+            <script dangerouslySetInnerHTML={{ __html: GOOGLE_TAG_SNIPPET }} />
+          </>
+        ) : null}
         {TRACKING.GTM_ID ? <script dangerouslySetInnerHTML={{ __html: GTM_SNIPPET }} /> : null}
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: META_PIXEL_SNIPPET }} />

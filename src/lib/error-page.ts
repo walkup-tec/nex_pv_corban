@@ -1,7 +1,16 @@
+import { GOOGLE_TAG_SNIPPET, GOOGLE_TAG_SRC, TRACKING } from "./tracking";
+
 export function renderErrorPage(): string {
+  const googleTag = TRACKING.GA4_ID
+    ? `<script async src="${GOOGLE_TAG_SRC}"></script>
+    <script>
+      ${GOOGLE_TAG_SNIPPET}
+    </script>`
+    : "";
   return `<!doctype html>
 <html lang="en">
   <head>
+    ${googleTag}
     <meta charset="utf-8" />
     <title>This page didn't load</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />

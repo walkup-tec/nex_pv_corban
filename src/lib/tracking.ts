@@ -1,7 +1,7 @@
 // Tracking config — fill in real IDs when provided by NEX. Empty = disabled.
 export const TRACKING = {
-  GTM_ID: "GTM-PQBN7SPR", // when set, GA4/Pixel should be fired via GTM to avoid duplicates
-  GA4_ID: "", // e.g. "G-XXXXXXXXXX"
+  GTM_ID: "GTM-PQBN7SPR",
+  GA4_ID: "G-W8E2BZEGGK",
   META_PIXEL_ID: "1133103506285537",
   CANONICAL_URL: "",
 };
@@ -10,6 +10,13 @@ export const WHATSAPP_NUMBER = "555197979224"; // +55 51 9797-9224
 const MESSAGE =
   "Olá! Sou correspondente bancário, vim pela landing page da NEX e quero o valor promocional de R$ 499,00 na gestão de Meta Ads. Gostaria de conversar com um especialista.";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(MESSAGE)}`;
+
+export const GOOGLE_TAG_SRC = `https://www.googletagmanager.com/gtag/js?id=${TRACKING.GA4_ID}`;
+export const GOOGLE_TAG_SNIPPET = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '${TRACKING.GA4_ID}');`;
 
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
 
@@ -51,17 +58,7 @@ export function initTracking() {
     s.src = src;
     document.head.appendChild(s);
   };
-  if (TRACKING.GTM_ID) return;
-  if (TRACKING.GA4_ID) {
-    w.dataLayer = w.dataLayer || [];
-    w.gtag = function () {
-      // eslint-disable-next-line prefer-rest-params
-      w.dataLayer!.push(arguments);
-    };
-    w.gtag("js", new Date());
-    w.gtag("config", TRACKING.GA4_ID);
-    add(`https://www.googletagmanager.com/gtag/js?id=${TRACKING.GA4_ID}`);
-  }
+  if (TRACKING.GTM_ID || TRACKING.GA4_ID) return;
   if (TRACKING.META_PIXEL_ID && typeof w.fbq !== "function") {
     const q: unknown[] = [];
     const fbq = (...a: unknown[]) => q.push(a);
